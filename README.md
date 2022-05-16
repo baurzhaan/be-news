@@ -9,7 +9,7 @@ Instruction on how to add environment files:
     - save your changes.
 
   2) create file ".env.development"
-    - type `cp .env-example .env.development` in the current folder, this will copy the content of example file to the new file.
-    - open '.env.development' file in editor (probably in VSCode).
-    - replace the 'database_name_here' with the name of your development database, i.e. 'nc_news_development'.
-    - save your changes.
+  Markup: - type `cp .env-example .env.development` in the current folder, this will copy the content of example file to the new file.
+        - open '.env.development' file in editor (probably in VSCode).
+        - replace the 'database_name_here' with the name of your development database, i.e. 'nc_news_development'.
+        - save your changes.
