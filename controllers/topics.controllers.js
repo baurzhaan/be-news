@@ -1,9 +1,13 @@
 const selectTopics = require('../models/topics.models.js');
 
-console.log('I am a topic controller');
+function getTopics(request, response, next) {
+  selectTopics()
+    .then((topics) => {
+      response.status(200).send(topics);
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
 
-function getTopics(request, response) {
-  
-}
-
-module.exports = getTopics
+module.exports = getTopics;
