@@ -7,9 +7,11 @@ exports.selectTopics = () => {
     });
 };
 
-// exports.selectArticleById = (articleId) => {
-//   return db.query('SELECT * FROM articles WHERE article_id = $1', [articleId])
-//   .then(({ rows }) => {
-//     return rows[0];
-//   });
-// };
+exports.selectArticleById = (articleId) => {
+  const sqlString = 'SELECT * FROM articles WHERE article_id = $1;';
+  return db.query(sqlString, [articleId])
+  .then(({ rows }) => {
+    if (rows.length) return rows[0];
+    return Promise.reject({ code: 404, msg: 'The article not found'});
+  });
+};
