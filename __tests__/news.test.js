@@ -31,14 +31,22 @@ describe('GET /api/topics', () => {
 });
 
 // describe('GET /api/articles/:article_id', () => {
-//   test('reponds with article with aricle_id', () => {
+//   test('responds with article with aricle_id', () => {
 //     return request(app)
 //       .get('/api/articles/1')
 //       .expect(200)
 //       .then((response) => {
 //         expect(response.body).toHaveLength(1);
+//         expect(response.body).toHaveProperty('author');
+//         expect(response.body).toHaveProperty('title');
+//         expect(response.body).toHaveProperty('article_id');
+//         expect(response.body).toHaveProperty('body');
+//         expect(response.body).toHaveProperty('topic');
+//         expect(response.body).toHaveProperty('created_at');
+//         expect(response.body).toHaveProperty('votes');
 //       })
 //       .catch((error) => {
+//         console.log('catched error');
 //         if (error) throw error;
 //       })
 //   })

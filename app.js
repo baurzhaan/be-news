@@ -7,7 +7,7 @@ app.get('/api/topics', getTopics);
 
 // app.get('/api/articles/:article_id', getArticleById);
 
-app.use((error, request, response, next) => {
+app.use((error, request, response) => {
   console.log(error, '<<< caught an error in the last app.use');
   response.status(500).send('Server Error!');
 });
