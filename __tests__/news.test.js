@@ -56,7 +56,7 @@ describe('GET /api/articles/:article_id', () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe('The article not found');
-      })
+      });
   });
   test('400: responds with message \'Bad request\' when the article id is not valid', () => {
     return request(app)
@@ -64,7 +64,7 @@ describe('GET /api/articles/:article_id', () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe('Not valid request');
-      })
+      });
   });
 });
 
@@ -113,5 +113,22 @@ describe('PATCH /api/articles/:article_id', () => {
       });
   });
   
+  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+    return request(app)
+      .patch('/api/articles/666')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('The article not found');
+      });
+  });
+  
+  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
+    return request(app)
+      .patch('/api/articles/not_valid_request')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Not valid request');
+      });
+  });
 
 })
