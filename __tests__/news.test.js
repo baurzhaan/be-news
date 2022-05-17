@@ -31,7 +31,7 @@ describe('GET /api/topics', () => {
 });
 
 describe('GET /api/articles/:article_id', () => {
-  test('responds with article with aricle_id', () => {
+  test('responds the article with an id of 1', () => {
     return request(app)
       .get('/api/articles/1')
       .expect(200)
@@ -56,6 +56,14 @@ describe('GET /api/articles/:article_id', () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe('The article not found');
+      })
+  });
+  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
+    return request(app)
+      .get('/api/articles/not_valid_request')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Not valid request');
       })
   })
 })

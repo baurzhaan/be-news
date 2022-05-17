@@ -8,7 +8,7 @@ exports.selectTopics = () => {
 };
 
 exports.selectArticleById = (articleId) => {
-  const sqlString = 'SELECT users.username as author, articles.title, articles.article_id, articles.body, articles.topic, articles.created_at, articles.votes FROM articles INNER JOIN users ON articles.author = users.username WHERE articles.article_id = $1;';
+  const sqlString = 'SELECT * FROM articles WHERE article_id = $1;';
   return db.query(sqlString, [articleId])
   .then(({ rows }) => {
     if (rows.length) return rows[0];

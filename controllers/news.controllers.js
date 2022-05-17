@@ -17,7 +17,7 @@ exports.getArticleById = (request, response, next) => {
       response.status(200).send(article);
     })
     .catch((error) => {
-      console.log(error, '<<< an error in getArticleById controller/model');
+      // console.log(error, '<<< an error in getArticleById controller/model');
       next(error);
     })
 };
