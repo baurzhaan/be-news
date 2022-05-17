@@ -67,3 +67,27 @@ describe('GET /api/articles/:article_id', () => {
       })
   })
 })
+
+describe('PATCH /api/articles/:article_id', () => {
+  const incVote = { inc_votes : 10 };
+  const updatedArticle = {
+    article_id: 3,
+    title: "Eight pug gifs that remind me of mitch",
+    topic: "mitch",
+    author: "icellusedkars",
+    body: "some gifs",
+    created_at: 1604394720000,
+    votes: 10
+  }
+  test('check if an input is an object', () => {
+    return request(app)
+      .patch('/api/articles/3')
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+      });
+  });
+  // test('positive number of votes increments the votes', () => {
+  // test('negative number of votes decrements the votes')
+  // test('if the result votes is less than 0, returns 0')
+  // test('error - if not a number -> bad request')
+})
