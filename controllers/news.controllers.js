@@ -6,17 +6,14 @@ exports.getTopics = (request, response, next) => {
       return response.status(200).send(topics);
     })
     .catch((error) => {
+      console.log(error, '<<< error in controller or model');
       next(error);
-    });
+    })
 };
 
 // exports.getArticleById = (request, response, next) => {
-//   console.log(request.params.article_id, '<<< request');
 //   selectArticleById(request.params.article_id)
 //     .then((article) => {
-//       console.log(article, '<<< article');
-//     })
-//     .catch((error) => {
-//       next(error);
-//     })
-// }
+//       response.status(200).send(article);
+//     });
+// };
