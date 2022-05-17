@@ -30,29 +30,32 @@ describe('GET /api/topics', () => {
   });
 });
 
-// describe('GET /api/articles/:article_id', () => {
-//   test('responds with article with aricle_id', () => {
-//     return request(app)
-//       .get('/api/articles/1')
-//       .expect(200)
-//       .then(({body}) => { // destructure body from the response
-//         expect(body).toBeInstanceOf(Object);
-//         expect(body).toHaveProperty('author');
-//         expect(body.author).toBe('butter_bridge');
-//         expect(body).toHaveProperty('title');
-//         expect(body.title).toBe('Living in the shadow of a great man');
-//         expect(body).toHaveProperty('article_id');
-//         expect(body).toHaveProperty('body');
-//         expect(body.body).toBe('I find this existence challenging');
-//         expect(body).toHaveProperty('topic');
-//         expect(body.topic).toBe('mitch');
-//         expect(body).toHaveProperty('created_at');
-//         expect(body).toHaveProperty('votes');
-//         expect(body.votes).toBe(100);
-//       })
-//       .catch((error) => {
-//         console.log('catched error');
-//         if (error) throw error;
-//       })
-//   })
-// })
+describe('GET /api/articles/:article_id', () => {
+  test('responds with article with aricle_id', () => {
+    return request(app)
+      .get('/api/articles/1')
+      .expect(200)
+      .then(({ body }) => { // destructure body from the response
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toEqual(
+          expect.objectContaining({
+            'author': expect.any(String),
+            'title': expect.any(String),
+            'article_id': 1,
+            'body': expect.any(String),
+            'topic': expect.any(String),
+            'created_at': expect.anything(),
+            'votes': expect.any(Number)
+          })
+        );
+      });
+  });
+  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+    return request(app)
+      .get('/api/articles/666')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('The article not found');
+      })
+  })
+})
