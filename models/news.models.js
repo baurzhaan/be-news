@@ -16,7 +16,7 @@ exports.selectArticleById = (articleId) => {
 };
 
 exports.updateArticleById = (articleId, incVote) => {
-  return db.query('SELECT votes FROM articles;')
+  return db.query('SELECT votes FROM articles WHERE article_id = $1;', [articleId])
   .then(({ rows }) => {
     return db.query('UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *', [rows[0].votes + incVote.inc_votes, articleId])
     .then(({ rows }) => {
