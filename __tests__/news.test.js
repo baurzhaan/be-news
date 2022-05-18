@@ -7,7 +7,7 @@ const db = require('../db/connection.js');
 afterAll(() => db.end());
 beforeEach(() => seed(testData));
 
-describe('GET /api/topics', () => {
+describe('3. GET /api/topics', () => {
   test('responds with object containing all items', () => {
     return request(app)
       .get('/api/topics')
@@ -30,8 +30,8 @@ describe('GET /api/topics', () => {
   });
 });
 
-describe('GET /api/articles/:article_id', () => {
-  test.skip('responds the article with an id of 1', () => {
+describe('4. GET /api/articles/:article_id', () => {
+  test('responds the article with an id of 1', () => {
     return request(app)
       .get('/api/articles/1')
       .expect(200)
@@ -68,7 +68,7 @@ describe('GET /api/articles/:article_id', () => {
   });
 });
 
-describe('PATCH /api/articles/:article_id', () => {
+describe('5. PATCH /api/articles/:article_id', () => {
   test('check if an input is an object', () => {
     return request(app)
       .patch('/api/articles/3')
@@ -130,7 +130,7 @@ describe('PATCH /api/articles/:article_id', () => {
   });
 });
 
-describe('GET /api/users', () => {
+describe('6. GET /api/users', () => {
   test('responds with an array of objects, each of each has \'username\' property', () => {
     return request(app)
       .get('/api/users')
@@ -154,7 +154,7 @@ describe('GET /api/users', () => {
   });
 });
 
-describe('GET /api/articles/:article_id (comment count)', () => {
+describe('7. GET /api/articles/:article_id (comment count)', () => {
   test('returns the updated article object with the \'comment_count\' property', () => {
     const articleWithCommentCount = {
       article_id: 3,
