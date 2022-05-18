@@ -140,6 +140,7 @@ describe('GET /api/users', () => {
         expect(body).toBeInstanceOf(Array);
         body.forEach((topic) => {
           expect(topic).toHaveProperty('username');
+          expect(Object.keys(topic).length).toBe(3);
         });
       });
   });
