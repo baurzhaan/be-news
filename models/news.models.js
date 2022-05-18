@@ -15,15 +15,12 @@ exports.selectArticleById = (articleId) => {
   });
 };
 
-exports.updateArticleById = (articleId, incVote) => {
-  return db.query('SELECT votes FROM articles WHERE article_id = $1;', [articleId])
-  .then(({ rows }) => {
-    if (!rows.length) return Promise.reject({ code: 404, msg: 'The article not found' });
-    return db.query('UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *', [rows[0].votes + incVote.inc_votes, articleId])
+exports.updateArticleById = (articleId, { inc_votes }) => {
+  return db.query('UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *', [inc_votes, articleId])
     .then(({ rows }) => {
+      if (!rows.length) return Promise.reject({ code: 404, msg: 'The article not found' });
       return rows[0];
     });
-  });
 }
 
 exports.selectUsers = () => {
