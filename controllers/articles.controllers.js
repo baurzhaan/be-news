@@ -3,6 +3,8 @@ const { selectArticleById, updateArticleById } = require('../models/articles.mod
 exports.getArticleById = (request, response, next) => {
   selectArticleById(request.params.article_id)
     .then((article) => {
+      const timeOffset = article.created_at.getTimezoneOffset() * 60000;
+      article.created_at = article.created_at.getTime() - timeOffset;
       response.status(200).send(article);
     })
     .catch((error) => {
