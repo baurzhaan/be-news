@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, updateArticleById } = require('../models/news.models.js');
+const { selectTopics, selectArticleById, updateArticleById, selectUsers } = require('../models/news.models.js');
 
 exports.getTopics = (_, response, next) => {
   selectTopics()
@@ -7,7 +7,7 @@ exports.getTopics = (_, response, next) => {
     })
     .catch((error) => {
       next(error);
-    })
+    });
 };
 
 exports.getArticleById = (request, response, next) => {
@@ -17,7 +17,7 @@ exports.getArticleById = (request, response, next) => {
     })
     .catch((error) => {
       next(error);
-    })
+    });
 };
 
 exports.patchArticleById = (request, response, next) => {
@@ -29,5 +29,15 @@ exports.patchArticleById = (request, response, next) => {
     })
     .catch((error) => {
       next(error);
+    });
+};
+
+exports.getUsers = (_, response, next) => {
+  selectUsers()
+    .then((users) => {
+      return response.status(200).send(users);
     })
+    .catch((error) => {
+      next(error);
+    });
 };

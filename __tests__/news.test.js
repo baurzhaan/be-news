@@ -112,7 +112,6 @@ describe('PATCH /api/articles/:article_id', () => {
         expect(body).toEqual(updatedArticle);
       });
   });
-  
   test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
     return request(app)
       .patch('/api/articles/666')
@@ -121,7 +120,6 @@ describe('PATCH /api/articles/:article_id', () => {
         expect(body.msg).toBe('The article not found');
       });
   });
-  
   test('400: responds with message \'Bad request\' when the article id is not valid', () => {
     return request(app)
       .patch('/api/articles/not_valid_request')
@@ -130,5 +128,26 @@ describe('PATCH /api/articles/:article_id', () => {
         expect(body.msg).toBe('Not valid request');
       });
   });
+});
 
-})
+describe('GET /api/users', () => {
+  test('responds with an array of objects, each of each has \'username\' property', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveLength(4);
+        body.forEach((topic) => {
+          expect(topic).toHaveProperty('username');
+        });
+      });
+  });
+  test('404: Returns \'Route not found\' when the route doesn\'t exist', () => {
+    return request(app)
+    .get('/api/nothing')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe('Route not found');
+    });
+  });
+});
