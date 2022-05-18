@@ -175,3 +175,51 @@ describe('7. GET /api/articles/:article_id (comment count)', () => {
     });
   });
 });
+
+describe('8. GET /api/articles', () => {
+  test('responds with array, which contains appropriate properties', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeInstanceOf(Array);
+      articles.forEach(article => {
+        expect(article).toEqual(expect.any(Object));
+        expect(article).toEqual({
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(Number),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number)
+        });
+      });
+    });
+  });
+  test('specific article has correct comment_count', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(({ body: articles }) => {
+      const specificArticle = articles.find(article => article.title === 'They\'re not exactly dogs, are they?');
+      expect(specificArticle.comment_count).toBe(2);
+    });
+  });
+  test('objects are sorted by \'date\' property in descending order', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('created_at', { descending: true });
+    });
+  })
+  test('404: Returns \'Route not found\' when the route doesn\'t exist', () => {
+    return request(app)
+    .get('/api/nothing')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe('Route not found');
+    });
+  });
+});
