@@ -137,6 +137,7 @@ describe('GET /api/users', () => {
       .expect(200)
       .then(({ body }) => {
         expect(body).toHaveLength(4);
+        expect(body).toBeInstanceOf(Array);
         body.forEach((topic) => {
           expect(topic).toHaveProperty('username');
         });
