@@ -1,11 +1,4 @@
-const db = require('../db/connection.js')
-
-exports.selectTopics = () => {
-  return db.query('SELECT * FROM topics')
-    .then(({ rows }) => {
-      return rows;
-    });
-};
+const db = require('../db/connection.js');
 
 exports.selectArticleById = (articleId) => {
   return db.query('SELECT * FROM articles WHERE article_id = $1;', [articleId])
@@ -22,10 +15,3 @@ exports.updateArticleById = (articleId, { inc_votes }) => {
       return rows[0];
     });
 }
-
-exports.selectUsers = () => {
-  return db.query('SELECT * FROM users')
-    .then(({ rows }) => {
-      return rows;
-    });
-};
