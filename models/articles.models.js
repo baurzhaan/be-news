@@ -24,4 +24,4 @@ exports.updateArticleById = (articleId, { inc_votes }) => {
       if (articleRows.length) return articleRows[0];
       return Promise.reject({ code: 404, msg: 'The article not found' });
     });
-}
+};

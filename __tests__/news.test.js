@@ -223,3 +223,40 @@ describe('8. GET /api/articles', () => {
     });
   });
 });
+
+describe('9. GET /api/articles/:article_id/comments', () => {
+  test('responds with an array of comments for the given article_id', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Array);
+        body.forEach(comment => {
+          expect(comment).toEqual(expect.any(Object));
+          expect(comment).toEqual({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(Number),
+              author: expect.any(String),
+              body: expect.any(String)
+          });
+        });
+    });
+  });
+  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+    return request(app)
+      .get('/api/articles/666/comments')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('The article not found');
+      });
+  });
+  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
+    return request(app)
+      .get('/api/articles/not_valid_request')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Not valid request');
+      });
+  });
+});
