@@ -225,3 +225,20 @@ describe('9. GET /api/articles/:article_id/comments', () => {
       });
   });
 });
+
+describe('10. POST /api/articles/:article_id/comments', () => {
+  const commentBody = 'just a comment';
+  const commentAuthor = 'icellusedkars';
+  const commentTime = Date.now();
+  const input = { username: commentAuthor, body: commentBody };
+  
+  test('returns an object if an input is an object', () => {  
+    return request(app)
+      .post('/api/articles/3/comments')
+      .send(input)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+      });
+  });
+  
+});
