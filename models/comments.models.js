@@ -5,6 +5,6 @@ exports.selectCommentsByArticleId = (articleId) => {
   return db.query(sqlQuery, [articleId])
   .then(({ rows: commentsRows }) => {
     if (commentsRows.length > 0) return commentsRows;
-    return Promise.reject({ code: 404, msg: 'The article not found' });
+    return Promise.reject({ code: 404, msg: 'Not found' });
   });
 };

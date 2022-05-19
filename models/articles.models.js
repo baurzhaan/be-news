@@ -13,7 +13,7 @@ exports.selectArticleById = (articleId) => {
   return db.query(sqlQuery, [articleId])
   .then(({ rows: articleRows }) => {
     if (articleRows.length) return articleRows[0];
-    return Promise.reject({ code: 404, msg: 'The article not found' });
+    return Promise.reject({ code: 404, msg: 'Not found' });
   });
 };
 
@@ -22,6 +22,6 @@ exports.updateArticleById = (articleId, { inc_votes }) => {
   return db.query(sqlQuery, [inc_votes, articleId])
     .then(({ rows: articleRows }) => {
       if (articleRows.length) return articleRows[0];
-      return Promise.reject({ code: 404, msg: 'The article not found' });
+      return Promise.reject({ code: 404, msg: 'Not found' });
     });
 };

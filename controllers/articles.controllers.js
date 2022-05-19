@@ -1,6 +1,6 @@
 const { selectArticles, selectArticleById, updateArticleById } = require('../models/articles.models');
 
-exports.getArticles = (_, response, next) => {
+exports.getArticles = (_request, response, next) => {
   selectArticles()
   .then((articleRows) => {
     articleRows.forEach(article => {

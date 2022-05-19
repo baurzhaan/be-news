@@ -11,33 +11,33 @@ app.get('/api/topics', getTopics);
 
 app.get('/api/users', getUsers);
 
-app.get('/api/articles', getArticles);
-app.get('/api/articles/:article_id', getArticleById);
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
+app.get('/api/articles/:article_id', getArticleById);
+app.get('/api/articles', getArticles);
 
 app.patch('/api/articles/:article_id', patchArticleById);
 
-app.all('/*', (_, response) => {
+app.all('/*', (_request, response) => {
   response.status(404).send({ msg: 'Route not found' });
 });
 
-app.use((error, _, response, next) => {
-  if (error.code === 404 && error.msg === 'The article not found') {
+app.use((error, _request, response, next) => {
+  if (error.code === '22P02') {
+    response.status(400).send({ msg: 'Invalid request' });
+  } else {
+    next(error);
+  };
+});
+
+app.use((error, _request, response, next) => {
+  if (error.code) {
     response.status(error.code).send({ msg: error.msg });
   } else {
     next(error);
   };
 });
 
-app.use((error, _, response, next) => {
-  if (error.code === '22P02') {
-    response.status(400).send({ msg: 'Not valid request' });
-  } else {
-    next(error);
-  };
-});
-
-app.use((error, _, response) => {
+app.use((_error, _request, response) => {
   response.status(500).send({ msg: 'Server Error!' });
 });
 

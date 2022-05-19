@@ -35,7 +35,7 @@ describe('4. GET /api/articles/:article_id', () => {
     return request(app)
       .get('/api/articles/1')
       .expect(200)
-      .then(({ body }) => { // destructure body from the response
+      .then(({ body }) => {
         expect(body).toBeInstanceOf(Object);
         expect(body).toEqual(
           expect.objectContaining({
@@ -55,7 +55,7 @@ describe('4. GET /api/articles/:article_id', () => {
       .get('/api/articles/666')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('The article not found');
+        expect(body.msg).toBe('Not found');
       });
   });
   test('400: responds with message \'Bad request\' when the article id is not valid', () => {
@@ -63,7 +63,7 @@ describe('4. GET /api/articles/:article_id', () => {
       .get('/api/articles/not_valid_request')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not valid request');
+        expect(body.msg).toBe('Invalid request');
       });
   });
 });
@@ -117,7 +117,7 @@ describe('5. PATCH /api/articles/:article_id', () => {
       .patch('/api/articles/666')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('The article not found');
+        expect(body.msg).toBe('Not found');
       });
   });
   test('400: responds with message \'Bad request\' when the article id is not valid', () => {
@@ -125,7 +125,7 @@ describe('5. PATCH /api/articles/:article_id', () => {
       .patch('/api/articles/not_valid_request')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not valid request');
+        expect(body.msg).toBe('Invalid request');
       });
   });
 });
@@ -144,34 +144,15 @@ describe('6. GET /api/users', () => {
         });
       });
   });
-  test('404: Returns \'Route not found\' when the route doesn\'t exist', () => {
-    return request(app)
-    .get('/api/nothing')
-    .expect(404)
-    .then((response) => {
-      expect(response.body.msg).toBe('Route not found');
-    });
-  });
 });
 
 describe('7. GET /api/articles/:article_id (comment count)', () => {
   test('returns the updated article object with the \'comment_count\' property', () => {
-    const articleWithCommentCount = {
-      article_id: 3,
-      title: "Eight pug gifs that remind me of mitch",
-      topic: "mitch",
-      author: "icellusedkars",
-      body: "some gifs",
-      created_at: 1604394720000,
-      votes: 0,
-      comment_count: 2
-    };
     return request(app)
       .get('/api/articles/3')
       .expect(200)
-      .then(({ body }) => { // destructure body from the response
-        expect(body).toBeInstanceOf(Object);
-        expect(body).toEqual(articleWithCommentCount);
+      .then(({ body }) => {
+        expect(body.comment_count).toBe(2);
     });
   });
 });
@@ -213,14 +194,6 @@ describe('8. GET /api/articles', () => {
     .then(({ body: articles }) => {
       expect(articles).toBeSortedBy('created_at', { descending: true });
     });
-  })
-  test('404: Returns \'Route not found\' when the route doesn\'t exist', () => {
-    return request(app)
-    .get('/api/nothing')
-    .expect(404)
-    .then((response) => {
-      expect(response.body.msg).toBe('Route not found');
-    });
   });
 });
 
@@ -248,15 +221,7 @@ describe('9. GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/666/comments')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('The article not found');
-      });
-  });
-  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
-    return request(app)
-      .get('/api/articles/not_valid_request')
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe('Not valid request');
+        expect(body.msg).toBe('Not found');
       });
   });
 });
