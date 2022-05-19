@@ -227,18 +227,55 @@ describe('9. GET /api/articles/:article_id/comments', () => {
 });
 
 describe('10. POST /api/articles/:article_id/comments', () => {
-  const commentBody = 'just a comment';
-  const commentAuthor = 'icellusedkars';
-  const commentTime = Date.now();
-  const input = { username: commentAuthor, body: commentBody };
   
   test('returns an object if an input is an object', () => {  
     return request(app)
       .post('/api/articles/3/comments')
-      .send(input)
+      .send({ username: 'icellusedkars', body: 'just a comment' })
       .then(({ body }) => {
         expect(body).toBeInstanceOf(Object);
       });
   });
   
+  test('201: posts and returns inserted comment object', () => {
+    return request(app)
+      .post('/api/articles/3/comments')
+      .send({ username: 'butter_bridge', body: 'no comments' })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toEqual(
+          {
+            comment_id: 19, // next available id
+            body: 'no comments',
+            article_id: 3,
+            author: 'butter_bridge',
+            votes: 0,
+            created_at: expect.any(Number) // current time
+          }
+        );
+      });
+  });
+  
+  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+    return request(app)
+      .post('/api/articles/777/comments')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Not found');
+      });
+  });
+
+  // test.only('400: returns \'Bad request\' if the input object doesn\'t have the \'username\', or \'body\' properties', () => {
+  //   return request(app)
+  //     .post('/api/articles/3/comments')
+  //     .send({ username: 'butter_bridge', body: 'no comments' })
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe('Invalid request');
+  //     });
+  // });
+
+
+
+
 });
