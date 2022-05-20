@@ -3,6 +3,7 @@ const app = require('../app.js');
 const seed = require('../db/seeds/seed.js');
 const testData = require('../db/data/test-data/index.js');
 const db = require('../db/connection.js');
+const { send } = require('express/lib/response');
 
 afterAll(() => db.end());
 beforeEach(() => seed(testData));
@@ -58,7 +59,7 @@ describe('4. GET /api/articles/:article_id', () => {
         expect(body.msg).toBe('Not found');
       });
   });
-  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
+  test('400: responds with message \'Invalid request\' when the article id is not valid', () => {
     return request(app)
       .get('/api/articles/not_valid_request')
       .expect(400)
@@ -227,22 +228,14 @@ describe('9. GET /api/articles/:article_id/comments', () => {
 });
 
 describe('10. POST /api/articles/:article_id/comments', () => {
-  
-  test('returns an object if an input is an object', () => {  
-    return request(app)
-      .post('/api/articles/3/comments')
-      .send({ username: 'icellusedkars', body: 'just a comment' })
-      .then(({ body }) => {
-        expect(body).toBeInstanceOf(Object);
-      });
-  });
-  
+
   test('201: posts and returns inserted comment object', () => {
     return request(app)
       .post('/api/articles/3/comments')
       .send({ username: 'butter_bridge', body: 'no comments' })
       .expect(201)
       .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
         expect(body).toEqual(
           {
             comment_id: 19, // next available id
@@ -250,20 +243,66 @@ describe('10. POST /api/articles/:article_id/comments', () => {
             article_id: 3,
             author: 'butter_bridge',
             votes: 0,
-            created_at: expect.any(Number) // current time
+            created_at: expect.any(String) // current time
           }
         );
       });
   });
   
-  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+  // test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+  //   return request(app)
+  //     .post('/api/articles/777/comments')
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe('Not found');
+  //     });
+  // });
+
+  test('400: responds with message \'Invalid ID\' when the article_id is invalid', () => {
+    return request(app)
+      .post('/api/articles/invalidId/comments')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid ID');
+      });
+  });
+
+  test('400: responds with message \'Invalid request: Missing author name\' when there is no username property in the request', () => {
+    return request(app)
+      .post('/api/articles/3/comments')
+      .send({ body: 'new comment'})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid request: Missing username');
+      });
+  });
+  test('400: responds with message \'Invalid request: Missing comment text\' when there is no body property in the request', () => {
+    return request(app)
+      .post('/api/articles/3/comments')
+      .send({ username: 'butter_bridge'})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid request: Missing body');
+      });
+  });
+
+  test('404: responds with message \'Article not found\' when there is no article with article_id in the \'articles\' table', () => {
     return request(app)
       .post('/api/articles/777/comments')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not found');
+        expect(body.msg).toBe('Article not found');
       });
   });
 
+  test('404: responds with message \'Author not found\' when there is no author with the given name in the \'author\' table', () => {
+    return request(app)
+      .post('/api/articles/3/comments')
+      .expect(404)
+      .send({ username: 'Tom', body: 'new comment' })
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid request');
+      });
+  });
 
 });
