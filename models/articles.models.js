@@ -9,19 +9,31 @@ exports.selectArticles = () => {
 };
 
 exports.selectArticleById = (articleId) => {
+  
+  if (isNaN(articleId)) {
+    return Promise.reject({ code: 'articleIdisNaN'});
+  } 
+  
   const sqlQuery = 'SELECT articles.*, COUNT(comments.article_id) comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;';
   return db.query(sqlQuery, [articleId])
   .then(({ rows: articleRows }) => {
     if (articleRows.length) return articleRows[0];
-    return Promise.reject({ code: 404, msg: 'Not found' });
-  });
+    return Promise.reject({ code: 'articleNotFound'});
+  })
+  .catch((error) => { 
+    if (error.code === 'articleNotFound') return Promise.reject({ code: 'articleNotFound'});
+    return Promise.reject({ code: 'something wrong with above SQL - COUNT statement'});
+  })
 };
 
 exports.updateArticleById = (articleId, { inc_votes }) => {
+  if (isNaN(articleId)) {
+    return Promise.reject({ code: 'articleIdisNaN'});
+  }
   const sqlQuery = 'UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *';
   return db.query(sqlQuery, [inc_votes, articleId])
     .then(({ rows: articleRows }) => {
       if (articleRows.length) return articleRows[0];
-      return Promise.reject({ code: 404, msg: 'Not found' });
-    });
+      return Promise.reject({ code: 'articleNotFound' });
+    })
 };

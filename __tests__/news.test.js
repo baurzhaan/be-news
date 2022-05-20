@@ -51,20 +51,20 @@ describe('4. GET /api/articles/:article_id', () => {
         );
     });
   });
-  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+  test('404: responds with \'Article not found\' when the article with article_id doesn\'t exist', () => {
     return request(app)
       .get('/api/articles/666')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not found');
+        expect(body.msg).toBe('Article not found');
       });
   });
-  test('400: responds with message \'Invalid request\' when the article id is not valid', () => {
+  test('400: responds with message \'Invalid article ID: not a number\' when the article id is not valid', () => {
     return request(app)
       .get('/api/articles/not_valid_request')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid request');
+        expect(body.msg).toBe('Invalid article ID: not a number');
       });
   });
 });
@@ -118,15 +118,15 @@ describe('5. PATCH /api/articles/:article_id', () => {
       .patch('/api/articles/666')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not found');
+        expect(body.msg).toBe('Article not found');
       });
   });
-  test('400: responds with message \'Bad request\' when the article id is not valid', () => {
+  test('400: responds with message \'Invalid request\' when the article id is not valid', () => {
     return request(app)
       .patch('/api/articles/not_valid_request')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid request');
+        expect(body.msg).toBe('Invalid article ID: not a number');
       });
   });
 });
@@ -222,7 +222,7 @@ describe('9. GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/666/comments')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('Not found');
+        expect(body.msg).toBe('Article not found');
       });
   });
 });
@@ -248,41 +248,23 @@ describe('10. POST /api/articles/:article_id/comments', () => {
         );
       });
   });
-  
-  // test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
-  //   return request(app)
-  //     .post('/api/articles/777/comments')
-  //     .expect(404)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe('Not found');
-  //     });
-  // });
 
-  test('400: responds with message \'Invalid ID\' when the article_id is invalid', () => {
+  test('400: responds with \'Invalid article ID: not a number\' when the article_id is invalid', () => {
     return request(app)
       .post('/api/articles/invalidId/comments')
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid ID');
+        expect(body.msg).toBe('Invalid article ID: not a number');
       });
   });
 
-  test('400: responds with message \'Invalid request: Missing author name\' when there is no username property in the request', () => {
+  test('400: responds with message \'Invalid request: missing property\' when there is no username/body property in the request', () => {
     return request(app)
       .post('/api/articles/3/comments')
       .send({ body: 'new comment'})
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid request: Missing username');
-      });
-  });
-  test('400: responds with message \'Invalid request: Missing comment text\' when there is no body property in the request', () => {
-    return request(app)
-      .post('/api/articles/3/comments')
-      .send({ username: 'butter_bridge'})
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe('Invalid request: Missing body');
+        expect(body.msg).toBe('Invalid request: missing property');
       });
   });
 
@@ -290,6 +272,7 @@ describe('10. POST /api/articles/:article_id/comments', () => {
     return request(app)
       .post('/api/articles/777/comments')
       .expect(404)
+      .send({ username: 'icellusedkars', body: 'new comment'})
       .then(({ body }) => {
         expect(body.msg).toBe('Article not found');
       });
@@ -301,8 +284,7 @@ describe('10. POST /api/articles/:article_id/comments', () => {
       .expect(404)
       .send({ username: 'Tom', body: 'new comment' })
       .then(({ body }) => {
-        expect(body.msg).toBe('Invalid request');
+        expect(body.msg).toBe('Author not found');
       });
   });
-
 });
