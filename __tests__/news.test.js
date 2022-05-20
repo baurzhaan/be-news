@@ -265,17 +265,5 @@ describe('10. POST /api/articles/:article_id/comments', () => {
       });
   });
 
-  // test.only('400: returns \'Bad request\' if the input object doesn\'t have the \'username\', or \'body\' properties', () => {
-  //   return request(app)
-  //     .post('/api/articles/3/comments')
-  //     .send({ username: 'butter_bridge', body: 'no comments' })
-  //     .expect(400)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe('Invalid request');
-  //     });
-  // });
-
-
-
 
 });

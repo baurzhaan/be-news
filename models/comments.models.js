@@ -18,12 +18,8 @@ exports.insertCommentByArticleId = (articleId, comment) => {
       insertedComment[0].created_at = insertedComment[0].created_at.getTime();
       return insertedComment[0];
     };
-    return Promise.reject({ code: 404, msg: 'Not foundAAA' });
+    return Promise.reject({ code: 404, msg: 'Not found' });
   })
-  // .catch((error) => {
-  //   if (error.code === '23503') {console.log("EEERR 23503")};
-  //   console.log(error, '<<< error');
-  // })
 };
 
 // console.log(currentDate, typeof currentDate, '<<< Number, in milliseconds');
