@@ -30,7 +30,7 @@ exports.selectArticleById = (articleId) => {
   })
   .catch((error) => { 
     if (error.code === 'articleNotFound') return Promise.reject({ code: 'articleNotFound'});
-    return Promise.reject({ code: sqlError, msg: 'something wrong with above SQL - COUNT statement'});
+    return Promise.reject({ code: 'sqlSyntaxError', msg: 'something wrong with above SQL - COUNT statement'});
   })
 };
 
