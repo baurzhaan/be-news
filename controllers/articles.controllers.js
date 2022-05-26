@@ -1,7 +1,7 @@
 const { selectArticles, selectArticleById, updateArticleById } = require('../models/articles.models');
 
-exports.getArticles = (_request, response, next) => {
-  selectArticles()
+exports.getArticles = (request, response, next) => {
+  selectArticles(request.query)
   .then((articleRows) => {
     articleRows.forEach(article => {
       const timeOffset = article.created_at.getTimezoneOffset() * 60000;

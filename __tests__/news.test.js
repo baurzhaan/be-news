@@ -3,7 +3,7 @@ const app = require('../app.js');
 const seed = require('../db/seeds/seed.js');
 const testData = require('../db/data/test-data/index.js');
 const db = require('../db/connection.js');
-const { send } = require('express/lib/response');
+const fs = require ('fs');
 
 afterAll(() => db.end());
 beforeEach(() => seed(testData));
@@ -288,3 +288,140 @@ describe('10. POST /api/articles/:article_id/comments', () => {
       });
   });
 });
+
+describe('11. GET /api/articles (queries)', () => {
+  
+  // no need for this test, as we already getting articles ordered by date
+  test('200: query \'sort_by\' without any column value sorts the articles by date (defaults to date)', () => {
+    return request(app)
+    .get('/api/articles?sort_by')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('created_at', { descending: true });
+    });
+  });
+  
+  test('200: query \'sort_by\' sorts the articles by any valid column', () => {
+    return request(app)
+    .get('/api/articles?sort_by=title')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('title', { descending: true });
+    })
+    .then(() => {
+      return request(app)
+      .get('/api/articles?sort_by=author')
+      .expect(200)
+      .then(({ body: articles }) => {
+        expect(articles).toBeSortedBy('author', { descending: true });
+      });
+    })
+  });
+
+  test('200: query of \'order\' without any value and \'sort_by\' without any value sorts by date column in descending order (defaults to descending)', () => {
+    return request(app)
+    .get('/api/articles?order')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('created_at', { descending: true });
+    });
+  });
+
+  test('200: query of \'order\' with \'asc\' value and \'sort_by\' without any value sorts by date column in ascending order', () => {
+    return request(app)
+    .get('/api/articles?sort_by&order=asc')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('created_at', { ascending: true });
+    });
+  });
+
+  test('200: query of \'sort_by\' and \'order\' sorts \'sort_by\' column in \'order\'', () => {
+    return request(app)
+    .get('/api/articles?sort_by=comment_count&order=desc')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('comment_count', { descending: true });
+    });
+  });
+
+  test('200: changing the order of queries in URL doesn\'t change the result', () => {
+    return request(app)
+    .get('/api/articles?order=desc&sort_by=comment_count')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('comment_count', { descending: true });
+    });
+  });
+
+  test('400: the value out of \'asc/desc\' in \'order\' query returns \'Invalid request: SQL syntax error\'', () => {
+    return request(app)
+    .get('/api/articles?order=notAscDesc&sort_by=comment_count')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Invalid request: SQL syntax error');
+    });
+  });
+
+  test('400: invalid column name in \'sort_by\' query returns \'Invalid request: invalid column to sort by\'', () => {
+    return request(app)
+    .get('/api/articles?sort_by=invalidColumn')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Invalid request: invalid column to sort by');
+    });
+  });
+
+  test('200: \'topic\' in query in URL filters the returned articles by topic value', () => {
+    return request(app)
+    .get('/api/articles?sort_by=title&order=asc&topic=cats')
+    .expect(200)
+    .then(({ body: articles }) => {
+      expect(articles).toBeSortedBy('title', { ascending: true });
+      articles.forEach(article => {
+        expect(article.topic).toBe('cats');
+      });
+    });
+  });
+});
+
+describe('12. DELETE /api/comments/:comment_id', () => {
+  test('204: returns no content', () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204)
+    .then((body) => {
+      expect(body.text).toBe('');
+    });
+  });
+
+  test('404: returns \'Comment not found\' if comment with ID doesn\'t exist', () => {
+    return request(app)
+    .delete('/api/comments/34343')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Comment not found');
+    });
+  });
+
+  test('400: returns \'Invalid request: comment ID is not valid\' if comment ID is not valid', () => {
+    return request(app)
+    .delete('/api/comments/notValidCommentId')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Invalid request: comment ID is not valid');
+    });;
+  });
+});
+
+describe('13. GET /api', () => {
+  const endpoints = fs.readFileSync('./endpoints.json', 'utf-8');
+  test('200: Responds with JSON describing all the available endpoints', () => {
+    return request(app)
+    .get('/api')
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.msg).toEqual(JSON.parse(endpoints));
+    })
+  })
+})
