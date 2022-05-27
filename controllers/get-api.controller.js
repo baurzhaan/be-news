@@ -110,5 +110,5 @@ exports.getApi = (_request, response, next) => {
     }
   }
 
-  response.status(200).send( JSON.stringify(JSON.parse({ msg: result }), null, 2) );
+  response.status(200).send({ msg: result });
 }
