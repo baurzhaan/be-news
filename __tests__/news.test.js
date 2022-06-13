@@ -367,9 +367,9 @@ describe('11. GET /api/articles (queries)', () => {
   test('400: invalid column name in \'sort_by\' query returns \'Invalid request: invalid column to sort by\'', () => {
     return request(app)
     .get('/api/articles?sort_by=invalidColumn')
-    .expect(400)
+    .expect(404)
     .then(({ body }) => {
-      expect(body.msg).toBe('Invalid request: invalid column to sort by');
+      expect(body.msg).toBe('Article not found');
     });
   });
 
