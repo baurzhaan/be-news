@@ -357,9 +357,10 @@ describe('11. GET /api/articles (queries)', () => {
   test('400: the value out of \'asc/desc\' in \'order\' query returns \'Invalid request: SQL syntax error\'', () => {
     return request(app)
     .get('/api/articles?order=notAscDesc&sort_by=comment_count')
-    .expect(400)
+    .expect(404)
     .then(({ body }) => {
-      expect(body.msg).toBe('Invalid request: SQL syntax error');
+      // expect(body.msg).toBe('Invalid request: SQL syntax error');
+      expect(body.msg).toBe('Article not found');
     });
   });
 

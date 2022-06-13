@@ -11,7 +11,8 @@ exports.selectArticles = (query) => {
   })
   .catch((error) => {
     if (error.code === '42601') {
-      return Promise.reject({ code: 'sqlSyntaxError'}); // order is not ASC/DESC
+      // return Promise.reject({ code: 'sqlSyntaxError'}); // order is not ASC/DESC
+      return Promise.reject({ code: 'articleNotFound'}); // order is not 
     } else if (error.code === '42703') {
       return Promise.reject({ code: 'sqlUndefinedColumn'}); // invalid column name
     }
