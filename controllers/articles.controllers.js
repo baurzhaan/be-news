@@ -3,7 +3,6 @@ const { selectArticles, selectArticleById, updateArticleById } = require('../mod
 exports.getArticles = (request, response, next) => {
   selectArticles(request.query)
   .then((articleRows) => {
-    console.log(articleRows, '<<< articleRows');
     articleRows.forEach(article => {
       const timeOffset = article.created_at.getTimezoneOffset() * 60000;
       article.created_at = article.created_at.getTime() - timeOffset;
