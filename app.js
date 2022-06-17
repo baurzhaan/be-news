@@ -1,26 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 
-const { getTopics } = require('./controllers/topics.controllers');
-const { getArticles, getArticleById, patchArticleById } = require('./controllers/articles.controllers');
-const { getUsers } = require('./controllers/users.controllers');
-const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controllers')
-const { getApi } = require('./controllers/get-api.controller')
+const { patchArticleById } = require('./controllers/articles.controllers');
+const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controllers');
+const apiRouter = require('./routes/api-router');
+const userRouter = require('./routes/user-router');
+const topicRouter = require('./routes/topic-router');
+const articleRouter = require('./routes/article-router');
+const commentRouter = require('./routes/comment-router');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/api', getApi);
-app.get('/api/topics', getTopics);
-app.get('/api/users', getUsers);
-app.get('/api/articles/:article_id', getArticleById);
-app.get('/api/articles/:article_id/comments', getCommentsByArticleId)
-app.patch('/api/articles/:article_id', patchArticleById);
-app.post('/api/articles/:article_id/comments', postCommentByArticleId);
-app.get('/api/articles', getArticles);
-app.delete('/api/comments/:comment_id', deleteCommentById);
+app.use('/api', apiRouter);
+
 app.all('/*', (_request, response) => {
   response.status(404).send({ msg: 'Route not found' });
 });
