@@ -32,7 +32,7 @@ app.use((error, _request, response, next) => {
     case 'articleNotFound': response.status(404).send({ msg: 'Article not found' }); break;
     case 'authorNotFound': response.status(404).send({ msg: 'Author not found' }); break;
     case 'sqlUndefinedColumn': response.status(400).send({ msg: 'Invalid request: invalid column to sort by' }); break;
-    case 'sqlSyntaxError': response.status(400).send({ msg: 'Invalid request: SQL syntax error' }); break;
+    // case 'sqlSyntaxError': response.status(400).send({ msg: 'Invalid request: SQL syntax error' }); break;
     case 'commentNotFound': response.status(404).send({ msg: 'Comment not found' }); break;
     case 'commentIdNotValid': response.status(400).send({ msg: 'Invalid request: comment ID is not valid' }); break;
     default: next(error);
@@ -47,79 +47,3 @@ app.use((error, _request, response) => { // default
 });
 
 module.exports = app;
-
-
-
-
-// app.use((error, _request, response, next) => { // articleIdisNaN
-//   if (error.code === 'articleIdisNaN') {
-//     response.status(400).send({ msg: 'Invalid article ID: not a number' });
-//   } else {
-//     next(error);
-//   }
-// })
-
-// app.use((error, _request, response, next) => { // missingProperty
-//   if (error.code === 'missingProperty') {
-//     response.status(400).send({ msg: 'Invalid request: missing property' });
-//   } else {
-//     next(error);
-//   }
-// })
-
-// app.use((error, _request, response, next) => { // articleNotFound
-//   if (error.code === 'articleNotFound') {
-//     response.status(404).send({ msg: 'Article not found' });
-//   } else {
-//     next(error);
-//   }
-// })
-
-// app.use((error, _request, response, next) => { // authorNotFound
-//   if (error.code === 'authorNotFound') {
-//     response.status(404).send({ msg: 'Author not found' });
-//   } else {
-//     next(error);
-//   }
-// })
-
-// app.use((error, _request, response, next) => { // SQL error: column doesn't exist
-//   if (error.code === 'sqlUndefinedColumn') {
-//     response.status(400).send({ msg: 'Invalid request: invalid column to sort by' });
-//   } else {
-//     next(error);
-//   };
-// })
-
-// app.use((error, _request, response, next) => { // SQL error: column doesn't exist
-//   if (error.code === 'sqlSyntaxError') {
-//     response.status(400).send({ msg: 'Invalid request: SQL syntax error' });
-//   } else {
-//     next(error);
-//   };
-// });
-
-// app.use((error, _request, response, next) => { // comment not found
-//   if (error.code === 'commentNotFound') {
-//     response.status(404).send({ msg: 'Comment not found' });
-//   } else {
-//     next(error);
-//   };
-// });
-
-// app.use((error, _request, response, next) => { // invalid comment ID
-//   if (error.code === 'commentIdNotValid') { 
-//     response.status(400).send({ msg: 'Invalid request: comment ID is not valid' });
-//   } else {
-//     next(error);
-//   };
-// });
-
-// app.use((error, _request, response) => { // default
-//   response.status(error.code).send({ 
-//     error: error.code,
-//     msg: error.msg 
-//   });
-// });
-
-// module.exports = app;
