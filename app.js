@@ -1,19 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-
-const { patchArticleById } = require('./controllers/articles.controllers');
-const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controllers');
 const apiRouter = require('./routes/api-router');
-const userRouter = require('./routes/user-router');
-const topicRouter = require('./routes/topic-router');
-const articleRouter = require('./routes/article-router');
-const commentRouter = require('./routes/comment-router');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
 app.use('/api', apiRouter);
 
 app.all('/*', (_request, response) => {
