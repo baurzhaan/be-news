@@ -113,7 +113,7 @@ describe.only('5. PATCH /api/articles/:article_id', () => {
         expect(body).toEqual(updatedArticle);
       });
   });
-  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+  test('404: responds with message \'Article not found\' when the article with article_id doesn\'t exist', () => {
     return request(app)
       .patch('/api/articles/666')
       .expect(404)
@@ -465,7 +465,7 @@ describe('17. GET /api/users/:username', () => {
 });
 
 describe.only('18. PATCH /api/comments/:comment_id', () => {
-  test.only('check if an input is an object', () => {
+  test('check if an input is an object', () => {
     return request(app)
       .patch('/api/comments/4')
       .then(({ body }) => {
@@ -509,15 +509,15 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body).toEqual(updatedArticle);
       });
   });
-  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+  test.only('404: responds with message \'Comment not found\' when the comment with comment_id doesn\'t exist', () => {
     return request(app)
-      .patch('/api/articles/666')
+      .patch('/api/comments/666')
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe('Article not found');
+        expect(body.msg).toBe('Comment not found');
       });
   });
-  test.only('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
+  test('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
     return request(app)
       .patch('/api/comments/not_number')
       .expect(400)

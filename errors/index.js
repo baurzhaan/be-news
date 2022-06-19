@@ -8,7 +8,7 @@ exports.errorHandler = (error, _request, response, next) => {
     // case 'sqlSyntaxError': response.status(400).send({ msg: 'Invalid request: SQL syntax error' }); break;
     case 'commentNotFound': response.status(404).send({ msg: 'Comment not found' }); break;
     case 'commentIdNotValid': response.status(400).send({ msg: 'Invalid request: comment ID is not valid' }); break;
-    case 'commentIdisNaN': console.log("I AM HERE"); response.status(400).send({ msg: 'Invalid comment ID: not a number' }); break;
+    case 'commentIdisNaN': response.status(400).send({ msg: 'Invalid comment ID: not a number' }); break;
     case 'userNotFound': response.status(404).send({ msg: 'User not found' }); break;
     default: next(error);
   };

@@ -51,7 +51,6 @@ exports.deleleComment = (comment_id) => {
 };
 
 exports.updateCommentById = (commentId, { inc_votes }) => {
-  console.log(commentId, "<<< comment Id");
   if (isNaN(commentId)) {
     return Promise.reject({ code: 'commentIdisNaN'});
   }
