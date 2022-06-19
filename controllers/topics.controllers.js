@@ -6,6 +6,7 @@ exports.getTopics = (_, response, next) => {
       return response.status(200).send(topics);
     })
     .catch((error) => {
+      console.log(error, "<<< error")
       next(error);
     });
 };
