@@ -40,7 +40,6 @@ exports.patchCommentById = (request, response, next) => {
       response.status(201).send(updatedComment);
     })
     .catch((error) => {
-      console.log("I am here");
       next(error);
     });
 };

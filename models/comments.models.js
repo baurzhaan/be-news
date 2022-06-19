@@ -53,7 +53,8 @@ exports.deleleComment = (comment_id) => {
 exports.updateCommentById = (commentId, { inc_votes }) => {
   if (isNaN(commentId)) {
     return Promise.reject({ code: 'commentIdisNaN'});
-  }
+  };
+  console.log(inc_votes, "<<< inc_votes");
   const sqlQuery = 'UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *';
   return db.query(sqlQuery, [inc_votes, commentId])
     .then(({ rows: commentRows }) => {

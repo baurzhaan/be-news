@@ -465,7 +465,7 @@ describe('17. GET /api/users/:username', () => {
 });
 
 describe.only('18. PATCH /api/comments/:comment_id', () => {
-  test('check if an input is an object', () => {
+  test.only('check if an input is an object', () => {
     return request(app)
       .patch('/api/comments/4')
       .then(({ body }) => {
@@ -473,22 +473,22 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body).toBeInstanceOf(Object);
       });
   });
-  test('positive number of votes increments the votes', () => {
+  test.only('positive number of votes increments the votes', () => {
     return request(app)
-      .patch('/api/articles/4')
+      .patch('/api/comments/4')
       .send({ inc_votes : 10 })
       .expect(201)
       .then(({ body }) => {
-        expect(body.votes).toBe(10);
+        expect(body.votes).toBe(-90);
       });
   });
-  test('negative number of votes decrements the votes', () => {
+  test.only('negative number of votes decrements the votes', () => {
     return request(app)
-      .patch('/api/articles/3')
+      .patch('/api/comments/3')
       .send({ inc_votes : -10 })
       .expect(201)
       .then(({ body }) => {
-        expect(body.votes).toBe(-10);
+        expect(body.votes).toBe(90);
       });
   });
   test('returns the updated article object', () => {
@@ -517,7 +517,7 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body.msg).toBe('Comment not found');
       });
   });
-  test('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
+  test.only('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
     return request(app)
       .patch('/api/comments/not_number')
       .expect(400)
