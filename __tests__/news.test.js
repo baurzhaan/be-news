@@ -23,7 +23,7 @@ describe('3. GET /api/topics', () => {
   });
   test('404: Returns \'Route not found\' when the route doesn\'t exist', () => {
     return request(app)
-    .get('/api/nothing')
+    .get('/api/topics/nothing')
     .expect(404)
     .then((response) => {
       expect(response.body.msg).toBe('Route not found');
@@ -139,9 +139,9 @@ describe('6. GET /api/users', () => {
       .then(({ body }) => {
         expect(body).toHaveLength(4);
         expect(body).toBeInstanceOf(Array);
-        body.forEach((topic) => {
-          expect(topic).toHaveProperty('username');
-          expect(Object.keys(topic).length).toBe(3);
+        body.forEach((user) => {
+          expect(user).toHaveProperty('username');
+          expect(Object.keys(user).length).toBe(3);
         });
       });
   });
@@ -428,4 +428,38 @@ describe('13. GET /api', () => {
       expect(body.msg).toEqual(JSON.parse(endpoints));
     })
   })
+})
+
+describe('17. GET /api/users/:username', () => {
+  test('200: responds the user object with a username property of butter_bridge', () => {
+    return request(app)
+    .get('/api/users/butter_bridge')
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toEqual(
+        { 
+          'username': 'butter_bridge',
+          'avatar_url':'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
+          'name': 'jonny',
+        }
+      )
+    })
+    .catch(error => console.log(error, "<<< error"));
+  })
+  test('404: Returns \'User not found\' when the user doesn\'t exist', () => {
+    return request(app)
+    .get('/api/users/non-existing-user')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe('User not found');
+    });
+  });
+  test('404: Returns \'User not found\' when the username request is send as a number', () => {
+    return request(app)
+    .get('/api/users/1')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe('User not found');
+    });
+  });
 })
