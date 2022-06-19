@@ -69,7 +69,7 @@ describe('4. GET /api/articles/:article_id', () => {
   });
 });
 
-describe.only('5. PATCH /api/articles/:article_id', () => {
+describe('5. PATCH /api/articles/:article_id', () => {
   test('check if an input is an object', () => {
     return request(app)
       .patch('/api/articles/3')
@@ -464,12 +464,11 @@ describe('17. GET /api/users/:username', () => {
   });
 });
 
-describe.only('18. PATCH /api/comments/:comment_id', () => {
+describe('18. PATCH /api/comments/:comment_id', () => {
   test('check if an input is an object', () => {
     return request(app)
       .patch('/api/comments/4')
       .then(({ body }) => {
-        console.log(body);
         expect(body).toBeInstanceOf(Object);
       });
   });
