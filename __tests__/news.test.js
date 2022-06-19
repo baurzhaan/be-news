@@ -465,7 +465,7 @@ describe('17. GET /api/users/:username', () => {
 });
 
 describe.only('18. PATCH /api/comments/:comment_id', () => {
-  test.only('check if an input is an object', () => {
+  test('check if an input is an object', () => {
     return request(app)
       .patch('/api/comments/4')
       .then(({ body }) => {
@@ -473,7 +473,7 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body).toBeInstanceOf(Object);
       });
   });
-  test.only('positive number of votes increments the votes', () => {
+  test('positive number of votes increments the votes', () => {
     return request(app)
       .patch('/api/comments/4')
       .send({ inc_votes : 10 })
@@ -482,7 +482,7 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body.votes).toBe(-90);
       });
   });
-  test.only('negative number of votes decrements the votes', () => {
+  test('negative number of votes decrements the votes', () => {
     return request(app)
       .patch('/api/comments/3')
       .send({ inc_votes : -10 })
@@ -492,24 +492,23 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
       });
   });
   test('returns the updated article object', () => {
-    const updatedArticle = {
-      article_id: 9,
-      title: "They're not exactly dogs, are they?",
-      topic: "mitch",
-      author: "butter_bridge",
-      body: "Well? Think about it.",
-      created_at: 1591438200000, //2020-06-06 10:10:00
-      votes: 20
+    const updatedComment = {
+      comment_id: 9,
+      body: "Superficially charming",
+      article_id: 1,
+      author: "icellusedkars",
+      votes: 20,
+      created_at: 1577848080000, //2020-01-01 03:08:00
     };
     return request(app)
-      .patch('/api/articles/9')
+      .patch('/api/comments/9')
       .send({ inc_votes : 20 })
       .expect(201)
       .then(({ body }) => {
-        expect(body).toEqual(updatedArticle);
+        expect(body).toEqual(updatedComment);
       });
   });
-  test.only('404: responds with message \'Comment not found\' when the comment with comment_id doesn\'t exist', () => {
+  test('404: responds with message \'Comment not found\' when the comment with comment_id doesn\'t exist', () => {
     return request(app)
       .patch('/api/comments/666')
       .expect(404)
@@ -517,7 +516,7 @@ describe.only('18. PATCH /api/comments/:comment_id', () => {
         expect(body.msg).toBe('Comment not found');
       });
   });
-  test.only('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
+  test('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
     return request(app)
       .patch('/api/comments/not_number')
       .expect(400)

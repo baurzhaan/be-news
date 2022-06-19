@@ -37,6 +37,8 @@ exports.deleteCommentById = (request, response, next) => {
 exports.patchCommentById = (request, response, next) => {
   updateCommentById(request.params.comment_id, request.body)
     .then((updatedComment) => {
+      const timeOffset = updatedComment.created_at.getTimezoneOffset() * 60000;
+      updatedComment.created_at = updatedComment.created_at.getTime() - timeOffset;
       response.status(201).send(updatedComment);
     })
     .catch((error) => {
