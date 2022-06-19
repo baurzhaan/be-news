@@ -1,4 +1,4 @@
-const { selectCommentsByArticleId, insertCommentByArticleId, deleleComment } = require('../models/comments.models')
+const { selectCommentsByArticleId, insertCommentByArticleId, deleleComment, updateCommentById } = require('../models/comments.models')
 
 exports.getCommentsByArticleId = (request, response, next) => {
   selectCommentsByArticleId(request.params.article_id)
@@ -32,4 +32,14 @@ exports.deleteCommentById = (request, response, next) => {
   .catch((error) => {
     next(error);
   });
+};
+
+exports.patchCommentById = (request, response, next) => {
+  updateCommentById(request.params.comment_id, request.body)
+    .then((updatedComment) => {
+      response.status(201).send(updatedComment);
+    })
+    .catch((error) => {
+      next(error);
+    });
 };

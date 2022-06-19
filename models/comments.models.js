@@ -49,3 +49,16 @@ exports.deleleComment = (comment_id) => {
     };
   });
 };
+
+exports.updateCommentById = (commentId, { inc_votes }) => {
+  console.log(commentId, "<<< comment Id");
+  if (isNaN(commentId)) {
+    return Promise.reject({ code: 'commentIdisNaN'});
+  }
+  const sqlQuery = 'UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *';
+  return db.query(sqlQuery, [inc_votes, commentId])
+    .then(({ rows: commentRows }) => {
+      if (commentRows.length) return commentRows[0];
+      return Promise.reject({ code: 'commentNotFound' });
+    })
+};

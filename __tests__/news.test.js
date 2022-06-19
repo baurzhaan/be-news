@@ -69,7 +69,7 @@ describe('4. GET /api/articles/:article_id', () => {
   });
 });
 
-describe('5. PATCH /api/articles/:article_id', () => {
+describe.only('5. PATCH /api/articles/:article_id', () => {
   test('check if an input is an object', () => {
     return request(app)
       .patch('/api/articles/3')
@@ -121,7 +121,7 @@ describe('5. PATCH /api/articles/:article_id', () => {
         expect(body.msg).toBe('Article not found');
       });
   });
-  test('400: responds with message \'Invalid request\' when the article id is not valid', () => {
+  test('400: responds with message \'Invalid article ID: not a number\' when the article id is not valid', () => {
     return request(app)
       .patch('/api/articles/not_valid_request')
       .expect(400)
@@ -428,7 +428,7 @@ describe('13. GET /api', () => {
       expect(body.msg).toEqual(JSON.parse(endpoints));
     })
   })
-})
+});
 
 describe('17. GET /api/users/:username', () => {
   test('200: responds the user object with a username property of butter_bridge', () => {
@@ -462,4 +462,67 @@ describe('17. GET /api/users/:username', () => {
       expect(response.body.msg).toBe('User not found');
     });
   });
-})
+});
+
+describe.only('18. PATCH /api/comments/:comment_id', () => {
+  test.only('check if an input is an object', () => {
+    return request(app)
+      .patch('/api/comments/4')
+      .then(({ body }) => {
+        console.log(body);
+        expect(body).toBeInstanceOf(Object);
+      });
+  });
+  test('positive number of votes increments the votes', () => {
+    return request(app)
+      .patch('/api/articles/4')
+      .send({ inc_votes : 10 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.votes).toBe(10);
+      });
+  });
+  test('negative number of votes decrements the votes', () => {
+    return request(app)
+      .patch('/api/articles/3')
+      .send({ inc_votes : -10 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.votes).toBe(-10);
+      });
+  });
+  test('returns the updated article object', () => {
+    const updatedArticle = {
+      article_id: 9,
+      title: "They're not exactly dogs, are they?",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "Well? Think about it.",
+      created_at: 1591438200000, //2020-06-06 10:10:00
+      votes: 20
+    };
+    return request(app)
+      .patch('/api/articles/9')
+      .send({ inc_votes : 20 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toEqual(updatedArticle);
+      });
+  });
+  test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
+    return request(app)
+      .patch('/api/articles/666')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article not found');
+      });
+  });
+  test.only('400: responds with message \'Invalid comment ID: not a number\' when the comment id is not a number', () => {
+    return request(app)
+      .patch('/api/comments/not_number')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid comment ID: not a number');
+      });
+  });
+});
