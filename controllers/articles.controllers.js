@@ -1,4 +1,4 @@
-const { selectArticles, selectArticleById, updateArticleById } = require('../models/articles.models');
+const { selectArticles, selectArticleById, updateArticleById, insertArticle } = require('../models/articles.models');
 
 exports.getArticles = (request, response, next) => {
   selectArticles(request.query)
@@ -39,3 +39,12 @@ exports.patchArticleById = (request, response, next) => {
       next(error);
     });
 };
+
+exports.postArticle = (request, response, next) => {
+  insertArticle(request.body)
+  .then((insertedArticle) => {
+    const timeOffset = insertedArticle.created_at.getTimezoneOffset() * 60000;
+    insertedArticle.created_at = insertedArticle.created_at.getTime() - timeOffset;
+    response.status(201).send(insertedArticle);
+  })
+}
