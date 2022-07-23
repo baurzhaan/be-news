@@ -45,4 +45,7 @@ exports.postArticle = (request, response, next) => {
   .then((insertedArticle) => {
     response.status(201).send(insertedArticle);
   })
+  .catch((error) => {
+    next(error);
+  })
 }

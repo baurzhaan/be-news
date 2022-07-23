@@ -10,6 +10,7 @@ exports.errorHandler = (error, _request, response, next) => {
     case 'commentIdNotValid': response.status(400).send({ msg: 'Invalid request: comment ID is not valid' }); break;
     case 'commentIdisNaN': response.status(400).send({ msg: 'Invalid comment ID: not a number' }); break;
     case 'userNotFound': response.status(404).send({ msg: 'User not found' }); break;
+    case 'AticleTitleIsFalsy': response.status(400).send({ msg: 'Article title cannot be empty' }); break;
     default: next(error);
   };
 }

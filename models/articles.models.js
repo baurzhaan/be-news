@@ -49,6 +49,9 @@ exports.updateArticleById = (articleId, { inc_votes }) => {
 };
 
 exports.insertArticle = ({author, title, body, topic}) => {
+  if (!title) {
+    return Promise.reject({ code: 'AticleTitleIsFalsy'});
+  };
   const sqlQuery = 'INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING *';
   return db.query(sqlQuery, [author, title, body, topic])
     .then(({ rows }) => {
