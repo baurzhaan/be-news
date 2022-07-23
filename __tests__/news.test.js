@@ -525,7 +525,7 @@ describe('18. PATCH /api/comments/:comment_id', () => {
   });
 });
 
-describe('19. POST /api/articles', () => {
+describe.only('19. POST /api/articles', () => {
   test('201: adds new article to the database and responds with it', () => {
     return request(app)
     .post('/api/articles')
@@ -552,8 +552,7 @@ describe('19. POST /api/articles', () => {
       );
     })
   });
-  // title VARCHAR NOT NULL
-  test.only('400. Returns error if the title is null/empty/falsy.', () => {
+  test('400. Returns error if the title is null/empty/falsy.', () => {
     return request(app)
     .post('/api/articles')
     .send({
@@ -567,7 +566,46 @@ describe('19. POST /api/articles', () => {
       expect(body.msg).toBe("Article title cannot be empty");
     })
   });
-  // topic VARCHAR NOT NULL REFERENCES topics(slug),
-  // author VARCHAR NOT NULL REFERENCES users(username),
-  // body VARCHAR NOT NULL,
+  test('400. Returns error if the topic is null/empty/falsy.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "lurker",
+      title: "Hey there title",
+      body: "This is an article which describes something",
+      topic: ""
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article topic cannot be empty");
+    })
+  });
+  test('400. Returns error if the author is null/empty/falsy.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "",
+      title: "Hey there title",
+      body: "This is an article which describes something",
+      topic: "hey topic"
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article author cannot be empty");
+    })
+  });
+  test('400. Returns error if the body is null/empty/falsy.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "Tom Hanks",
+      title: "Hey there title",
+      body: "",
+      topic: "hey topic"
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article body cannot be empty");
+    })
+  });
 })

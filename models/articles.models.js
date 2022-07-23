@@ -52,6 +52,15 @@ exports.insertArticle = ({author, title, body, topic}) => {
   if (!title) {
     return Promise.reject({ code: 'AticleTitleIsFalsy'});
   };
+  if (!topic) {
+    return Promise.reject({ code: 'AticleTopicIsFalsy'});
+  };
+  if (!author) {
+    return Promise.reject({ code: 'AticleAuthorIsFalsy'});
+  };
+  if (!body) {
+    return Promise.reject({ code: 'AticleBodyIsFalsy'});
+  };
   const sqlQuery = 'INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING *';
   return db.query(sqlQuery, [author, title, body, topic])
     .then(({ rows }) => {
