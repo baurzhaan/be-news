@@ -229,7 +229,7 @@ describe('9. GET /api/articles/:article_id/comments', () => {
 
 describe('10. POST /api/articles/:article_id/comments', () => {
 
-  test.only('201: posts and returns inserted comment object', () => {
+  test('201: posts and returns inserted comment object', () => {
     return request(app)
       .post('/api/articles/3/comments')
       .send({ username: 'butter_bridge', body: 'no comments' })
@@ -525,7 +525,7 @@ describe('18. PATCH /api/comments/:comment_id', () => {
   });
 });
 
-describe.only('19. POST /api/articles', () => {
+describe('19. POST /api/articles', () => {
   test('201: adds new article to the database and responds with it', () => {
     return request(app)
     .post('/api/articles')
@@ -537,7 +537,6 @@ describe.only('19. POST /api/articles', () => {
     })
     .expect(201)
     .then(({ body }) => {
-      console.log(body, "article");
       expect(body).toBeInstanceOf(Object);
       expect(body).toEqual(
         {
@@ -552,5 +551,23 @@ describe.only('19. POST /api/articles', () => {
         }
       );
     })
-  })
+  });
+  // title VARCHAR NOT NULL
+  test.only('400. Returns error if the title is null/empty/falsy.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "lurker",
+      title: "",
+      body: "This is an article which describes something",
+      topic: "mitch"
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article title cannot be empty");
+    })
+  });
+  // topic VARCHAR NOT NULL REFERENCES topics(slug),
+  // author VARCHAR NOT NULL REFERENCES users(username),
+  // body VARCHAR NOT NULL,
 })
