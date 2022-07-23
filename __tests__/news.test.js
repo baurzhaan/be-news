@@ -608,4 +608,32 @@ describe.only('19. POST /api/articles', () => {
       expect(body.msg).toBe("Article body cannot be empty");
     })
   });
+  test('404. Returns error if the author does not exists in users table.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "no_user",
+      title: "Screenplay in the dark",
+      body: "This is an article which describes something",
+      topic: "mitch"
+    })
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Author not found");
+    })
+  });
+  test('404. Returns error if the topic does not exists in topics table.', () => {
+    return request(app)
+    .post('/api/articles')
+    .send({
+      author: "lurker",
+      title: "Screenplay in the dark",
+      body: "This is an article which describes something",
+      topic: "no_topic"
+    })
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Topic not found");
+    })
+  });
 })
