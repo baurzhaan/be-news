@@ -525,7 +525,7 @@ describe('18. PATCH /api/comments/:comment_id', () => {
   });
 });
 
-describe.only('19. POST /api/articles', () => {
+describe('19. POST /api/articles', () => {
   test('201: adds new article to the database and responds with it', () => {
     return request(app)
     .post('/api/articles')
