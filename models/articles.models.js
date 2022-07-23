@@ -51,8 +51,11 @@ exports.updateArticleById = (articleId, { inc_votes }) => {
 exports.insertArticle = ({author, title, body, topic}) => {
   const sqlQuery = 'INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING *';
   return db.query(sqlQuery, [author, title, body, topic])
-    .then(({rows: insertedArticle}) => {
-      if (insertedArticle.length) return insertedArticle[0];
+    .then(({ rows }) => {
+      if (rows.length) {
+        const insertedArticle = {...rows[0], comment_count: 0};
+        return insertedArticle;
+      }
         // return error promise
     })
 }

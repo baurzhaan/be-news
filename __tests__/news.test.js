@@ -229,7 +229,7 @@ describe('9. GET /api/articles/:article_id/comments', () => {
 
 describe('10. POST /api/articles/:article_id/comments', () => {
 
-  test('201: posts and returns inserted comment object', () => {
+  test.only('201: posts and returns inserted comment object', () => {
     return request(app)
       .post('/api/articles/3/comments')
       .send({ username: 'butter_bridge', body: 'no comments' })
@@ -530,14 +530,27 @@ describe.only('19. POST /api/articles', () => {
     return request(app)
     .post('/api/articles')
     .send({
-      "author": "lurker",
-      "title": "Screenplay in the dark",
-      "body": "This is an article which describes something",
-      "topic": "mitch"
+      author: "lurker",
+      title: "Screenplay in the dark",
+      body: "This is an article which describes something",
+      topic: "mitch"
     })
     .expect(201)
-    .then(({body}) => {
-      console.log(body, "<<< inserted article")
+    .then(({ body }) => {
+      console.log(body, "article");
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toEqual(
+        {
+          article_id: 13,
+          author: "lurker",
+          title: "Screenplay in the dark",
+          body: "This is an article which describes something",
+          topic: "mitch",
+          votes: 0,
+          comment_count: 0,
+          created_at: expect.any(String) // current time
+        }
+      );
     })
   })
 })

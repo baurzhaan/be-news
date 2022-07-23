@@ -43,8 +43,6 @@ exports.patchArticleById = (request, response, next) => {
 exports.postArticle = (request, response, next) => {
   insertArticle(request.body)
   .then((insertedArticle) => {
-    const timeOffset = insertedArticle.created_at.getTimezoneOffset() * 60000;
-    insertedArticle.created_at = insertedArticle.created_at.getTime() - timeOffset;
     response.status(201).send(insertedArticle);
   })
 }
