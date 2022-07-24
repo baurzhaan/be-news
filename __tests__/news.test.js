@@ -174,7 +174,8 @@ describe('8. GET /api/articles', () => {
             topic: expect.any(String),
             created_at: expect.any(Number),
             votes: expect.any(Number),
-            comment_count: expect.any(Number)
+            comment_count: expect.any(Number),
+            total_count: expect.any(Number)
         });
       });
     });
@@ -639,13 +640,11 @@ describe('19. POST /api/articles', () => {
 });
 
 describe('20. GET /api/articles (pagination)', () => {
-  test('responds with array, limited by the pages and limits provided in the query', () => {
+  test('responds with array, limited by the pages and limits provided in the query. Adds total_count which represents total number of articles', () => {
     return request(app)
     .get('/api/articles?p=2&limit=5')
     .expect(200)
     .then(({ body: articles }) => {
-      // console.log(articles, "<<< fetched articles");
-      // console.log(articles.length, "<<< number of articles");
       expect(articles).toBeInstanceOf(Array);
       articles.forEach(article => {
         expect(article).toEqual(expect.any(Object));
@@ -656,7 +655,8 @@ describe('20. GET /api/articles (pagination)', () => {
             topic: expect.any(String),
             created_at: expect.any(Number),
             votes: expect.any(Number),
-            comment_count: expect.any(Number)
+            comment_count: expect.any(Number),
+            total_count: 12
         });
       });
     });
