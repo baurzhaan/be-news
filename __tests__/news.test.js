@@ -636,4 +636,29 @@ describe('19. POST /api/articles', () => {
       expect(body.msg).toBe("Topic not found");
     })
   });
-})
+});
+
+describe('20. GET /api/articles (pagination)', () => {
+  test('responds with array, limited by the pages and limits provided in the query', () => {
+    return request(app)
+    .get('/api/articles?p=2&limit=5')
+    .expect(200)
+    .then(({ body: articles }) => {
+      // console.log(articles, "<<< fetched articles");
+      // console.log(articles.length, "<<< number of articles");
+      expect(articles).toBeInstanceOf(Array);
+      articles.forEach(article => {
+        expect(article).toEqual(expect.any(Object));
+        expect(article).toEqual({
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(Number),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number)
+        });
+      });
+    });
+  });
+});
