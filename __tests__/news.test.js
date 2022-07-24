@@ -202,29 +202,29 @@ describe('8. GET /api/articles', () => {
 describe('9. GET /api/articles/:article_id/comments', () => {
   test('responds with an array of comments for the given article_id', () => {
     return request(app)
-      .get('/api/articles/1/comments')
-      .expect(200)
-      .then(({ body }) => {
-        expect(body).toBeInstanceOf(Array);
-        body.forEach(comment => {
-          expect(comment).toEqual(expect.any(Object));
-          expect(comment).toEqual({
-              comment_id: expect.any(Number),
-              votes: expect.any(Number),
-              created_at: expect.any(Number),
-              author: expect.any(String),
-              body: expect.any(String)
-          });
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toBeInstanceOf(Array);
+      body.forEach(comment => {
+        expect(comment).toEqual(expect.any(Object));
+        expect(comment).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String)
         });
+      });
     });
   });
   test('404: responds with message \'Not found\' when the article with article_id doesn\'t exist', () => {
     return request(app)
-      .get('/api/articles/666/comments')
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe('Article not found');
-      });
+    .get('/api/articles/666/comments')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Article not found');
+    });
   });
 });
 
@@ -640,7 +640,7 @@ describe('19. POST /api/articles', () => {
 });
 
 describe('20. GET /api/articles (pagination)', () => {
-  test('responds with array, limited by the pages and limits provided in the query. Adds total_count which represents total number of articles', () => {
+  test('200. Responds with array, limited by the pages and limits provided in the query. Adds total_count which represents total number of articles', () => {
     return request(app)
     .get('/api/articles?p=2&limit=5')
     .expect(200)
@@ -657,6 +657,27 @@ describe('20. GET /api/articles (pagination)', () => {
             votes: expect.any(Number),
             comment_count: expect.any(Number),
             total_count: 12
+        });
+      });
+    });
+  });
+});
+
+describe('21. GET /api/articles/:article_id/comments (pagination) ', () => {
+  test('200. Limits the number of responses according to the pages and limit provided as a query parameters', () => {
+    return request(app)
+    .get('/api/articles/1/comments?p=1&limit=3')
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toBeInstanceOf(Array);
+      body.forEach(comment => {
+        expect(comment).toEqual(expect.any(Object));
+        expect(comment).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String)
         });
       });
     });
