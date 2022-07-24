@@ -10,7 +10,7 @@ articleRouter
 articleRouter
 .route("/:article_id")
 .get(getArticleById)
-.patch(patchArticleById)
+.patch(patchArticleById);
 
 articleRouter
 .route("/:article_id/comments")
