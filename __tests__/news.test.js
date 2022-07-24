@@ -683,3 +683,20 @@ describe('21. GET /api/articles/:article_id/comments (pagination) ', () => {
     });
   });
 });
+
+describe('22. POST /api/topics', () => {
+  test('201: adds new topic to the database and responds with it', () => {
+    const newTopic = {
+      slug: "topic name here",
+      description: "description here"
+    };
+    return request(app)
+    .post('/api/topics')
+    .send(newTopic)
+    .expect(201)
+    .then(({ body }) => {
+      expect(body).toBeInstanceOf(Object);
+      expect(body).toEqual(newTopic);
+    })
+  });
+})

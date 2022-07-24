@@ -63,18 +63,18 @@ exports.insertArticle = ({author, title, body, topic}) => {
   };
   const sqlQuery = 'INSERT INTO articles (author, title, body, topic) VALUES ($1, $2, $3, $4) RETURNING *';
   return db.query(sqlQuery, [author, title, body, topic])
-    .then(({ rows }) => {
-      if (rows.length) {
-        const insertedArticle = {...rows[0], comment_count: 0};
-        return insertedArticle;
-      }
-    // return error promise
-    })
-    .catch((error) => {
-      switch (error.code) {
-        case '23503':
-          if (error.detail.startsWith('Key (author)=(no_user)')) return Promise.reject({ code: 'authorNotFound'});
-          if (error.detail.startsWith('Key (topic)=(no_topic)')) return Promise.reject({ code: 'topicNotFound'});
-      };
-    })
+  .then(({ rows }) => {
+    if (rows.length) {
+      const insertedArticle = {...rows[0], comment_count: 0};
+      return insertedArticle;
+    }
+  // return error promise
+  })
+  .catch((error) => {
+    switch (error.code) {
+      case '23503':
+        if (error.detail.startsWith('Key (author)=(no_user)')) return Promise.reject({ code: 'authorNotFound'});
+        if (error.detail.startsWith('Key (topic)=(no_topic)')) return Promise.reject({ code: 'topicNotFound'});
+    };
+  })
 }
