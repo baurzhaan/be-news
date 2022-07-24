@@ -1,6 +1,6 @@
 const db = require('../db/connection.js');
 
-exports.selectCommentsByArticleId = (articleId) => {
+exports.selectCommentsByArticleId = (articleId, page) => {
   const sqlQuery = 'SELECT comment_id, body, author, votes, created_at FROM comments WHERE article_id = $1';
   return db.query(sqlQuery, [articleId])
   .then(({ rows: commentsRows }) => {
@@ -12,8 +12,7 @@ exports.selectCommentsByArticleId = (articleId) => {
 exports.insertCommentByArticleId = (articleId, comment) => {
   if (isNaN(articleId)) {
     return Promise.reject({ code: 'articleIdisNaN'});
-  } 
-
+  };
   if (Object.keys(comment).includes('username') && Object.keys(comment).includes('body')) {
     const sqlQuery = 'INSERT INTO comments (body, article_id, author) VALUES ($1, $2, $3) RETURNING *';
     return db.query(sqlQuery, [comment.body, articleId, comment.username])

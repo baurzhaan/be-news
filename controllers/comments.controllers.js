@@ -1,13 +1,17 @@
 const { selectCommentsByArticleId, insertCommentByArticleId, deleleComment, updateCommentById } = require('../models/comments.models')
 
 exports.getCommentsByArticleId = (request, response, next) => {
+  const page = request.query.p ? request.query.p : 1;
+  const limit = request.query.limit ? request.query.limit : 10;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
   selectCommentsByArticleId(request.params.article_id)
   .then((comments) => {
     comments.forEach(comment => {
       const timeOffset = comment.created_at.getTimezoneOffset() * 60000;
       comment.created_at = comment.created_at.getTime() - timeOffset;
     });
-    response.status(200).send(comments);
+    response.status(200).send(comments.slice(startIndex, endIndex));
   })
   .catch((error) => {
     next(error);

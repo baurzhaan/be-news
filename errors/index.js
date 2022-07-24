@@ -10,6 +10,8 @@ exports.errorHandler = (error, _request, response, next) => {
     case 'ArticleTopicIsFalsy': response.status(400).send({ msg: 'Article topic cannot be empty' }); break;
     case 'ArticleAuthorIsFalsy': response.status(400).send({ msg: 'Article author cannot be empty' }); break;
     case 'ArticleBodyIsFalsy': response.status(400).send({ msg: 'Article body cannot be empty' }); break;
+    case 'invalidRequest': response.status(400).send({ msg: 'Invalid request' }); break;
+    
     //
     case 'userNotFound': response.status(404).send({ msg: 'User not found' }); break;
     case 'authorNotFound': response.status(404).send({ msg: 'Author not found' }); break;
